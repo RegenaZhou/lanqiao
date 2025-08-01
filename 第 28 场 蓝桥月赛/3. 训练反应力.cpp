@@ -30,6 +30,7 @@
 在时间节点 8 攻击，机器将在时间节点 10 反击，小蓝可以躲避。
 因此，小蓝最多可以攻击机器 3 次。*/
 #include <iostream>
+#include <map>
 using namespace std;
 using ll = long long;
 const int N = 1e5 + 9;
