@@ -15,4 +15,81 @@
 接下来 t 行，每行包含一个正整数 n（4≤n≤10^5），表示方阵的边长。
 
 输出格式
+
 输出共 t 行，每行一个整数，表示满足校医规定的路线总数。由于答案可能很大，请输出结果对 998244353 取模后的值。*/
+
+//总共吃2n-1道菜
+//荤菜：x*y=奇数，x为奇数且y也为奇数
+//至少要吃到 n−1 份荤菜  至多吃 n 份素菜
+#include <iostream>
+#include <vector>
+using namespace std;
+using ll = long long;
+const ll mod = 998244353;
+
+vector<ll> f, invf;
+
+ll qmi(ll a, ll b)//qmi快速幂取模算法，a是底数，b是指数
+{
+    ll res = 1;
+    while (b)
+    {
+        if (b & 1)//检查b是否为奇数，奇数时满足条件
+        {
+            res = res * a % mod;
+        }
+        a = a * a % mod;
+        b >>= 1;//相当于b/=2
+    }
+    return res;
+}
+
+void init(int n)
+{
+    f.resize(n + 1);//阶乘数组f
+    invf.resize(n + 1);//模逆元数组invf
+    f[0] = 1;
+    for (int i = 1; i <= n; i++)
+    {
+        f[i] = f[i - 1] * i % mod;
+    }
+    invf[n] = qmi(f[n], mod - 2);
+    for (int i = n - 1; i >= 0; i--)
+    {
+        invf[i] = invf[i + 1] * (i + 1) % mod;
+    }
+}
+
+ll C(int a, int b)//计算组合数
+{
+    if (b<0 || b>a) return 0;
+    return f[a] * invf[b] % mod * invf[a - b] % mod;
+}
+
+void solve()
+{
+    int n;
+    cin >> n;
+    if (n % 2 == 1)
+    {
+        int k = (n - 1) / 2;
+        cout << n * C(n - 1, k) % mod << '\n';
+    }
+    else
+    {
+        int k = (n - 2) / 2;
+        cout << 2 * C(n - 2, k) % mod << '\n';
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+    int t;
+    cin >> t;
+    init(100000);
+    while (t--)
+    {
+        solve();
+    }
+    return 0;
+}
