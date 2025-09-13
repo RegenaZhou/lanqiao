@@ -21,3 +21,30 @@ blueblue
 样例输出
 
 2*/
+#include <bits/stdc++.h>
+using namespace std;
+int a[4][4]={0};
+vector<int> ans(4,1e5);
+int main()
+{
+  ios::sync_with_stdio(0),cin.tie(0),cout.tie(0);
+  string s;
+  int sum=0;
+  cin>>s;
+  for(int i=0;i<(int)s.size();i++)
+  {
+    int num=i%4;
+    if(s[i]=='b') a[num][0]++;
+    else if(s[i]=='l') a[num][1]++;
+    else if(s[i]=='u') a[num][2]++;
+    else if(s[i]=='e') a[num][3]++;
+  }
+  for(int i=0;i<4;i++)
+  {
+    ans[i]=min({a[0][i%4],a[1][(i+1)%4],a[2][(i+2)%4],a[3][(i+3)%4]});
+    sum+=ans[i];
+  }
+  if(sum*4==s.size() && sum!=ans[0]) sum--;
+  cout<<sum<<'\n';
+  return 0;
+}
