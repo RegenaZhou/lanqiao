@@ -33,3 +33,50 @@
 对于 60% 的评测用例，m≤10^5 ;
 
 对于所有评测用例，1≤n≤10^5 , 1≤m,o≤10^9 , 1≤ai,bi,ci≤10^9 ，保证对于 i>1，一定有 ci−1<ci .*/
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <queue>
+using namespace std;
+using ll=long long;
+int main()
+{
+  ios::sync_with_stdio(0),cin.tie(0),cout.tie(0);
+  ll n,m,o,ans=-1,money=0,cntv=0;
+  cin>>n>>m>>o;
+  priority_queue<pair<ll,ll>,vector<pair<ll,ll>>> pq;
+  for(int i=0;i<n;i++)
+  {
+    ll a,b,c;
+    cin>>a>>b>>c;
+    pq.push({a,b});
+    money+=a*b;
+    cntv+=b;
+    while(cntv>m)
+    {
+      pair<ll,ll> top=pq.top();
+      pq.pop();
+      if(cntv-top.second>=m)
+      {
+        cntv-=top.second;
+        money-=top.first*top.second;
+      }
+      else
+      {
+        ll temp=cntv-m;
+        cntv-=temp;
+        money-=top.first*temp;
+        pq.push({top.first,top.second-temp});
+      }
+    }
+    if(cntv==m)
+    {
+      if(ans==-1 || money+c*o<ans)
+      {
+        ans=money+c*o;
+      }
+    }
+  }
+  cout<<ans<<'\n';
+  return 0;
+}
