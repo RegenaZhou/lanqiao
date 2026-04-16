@@ -32,33 +32,36 @@
 输出
 8*/
 #include <iostream>
+#include <cstring>
 #include <queue>
 using namespace std;
 const int dirs[4][2] = { {0,1},{0,-1}, {1, 0},{-1,0} };
 const int N = 110;
 int n, m, sr, sc, dr, dc;
-int grid[N][N], d[N][N];
+int grid[N][N], step[N][N];
 queue<pair<int, int>> q;
 int bfs() {
-    q.emplace(sr, sc);
-    memset(d, -1, sizeof d);
-    d[sr][sc] = 0;
+    q.push({ sr,sc });
+    memset(step, -1, sizeof step);
+    step[sr][sc] = 0;
     while (!q.empty()) {
-        pair<int, int> t = q.front();
+        pair<int, int> temp = q.front();
         q.pop();
         for (int i = 0; i < 4; i++) {
-            int x = t.first + dirs[i][0], y = t.second + dirs[i][1];
-            if (x > 0 && x <= n && y > 0 && y <= m && grid[x][y] == 1 && d[x][y] == -1) {
-                d[x][y] = d[t.first][t.second] + 1;
-                q.emplace(x, y);
+            int x = temp.first + dirs[i][0], y = temp.second + dirs[i][1];
+            if (x > 0 && x <= n && y > 0 && y <= m && grid[x][y] == 1 && step[x][y] == -1) {
+                step[x][y] = step[temp.first][temp.second] + 1;
+                q.push({ x,y });
                 if (x == dr && y == dc)
-                    return d[x][y];
+                    return step[x][y];
             }
         }
     }
     return -1;
 }
-int main() {
+int main()
+{
+    ios::sync_with_stdio(0),cin.tie(0),cout.tie(0);
     cin >> n >> m;
     for (int i = 1; i <= n; i++)
         for (int j = 1; j <= m; j++)
