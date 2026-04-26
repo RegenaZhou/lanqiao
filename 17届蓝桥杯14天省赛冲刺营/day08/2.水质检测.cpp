@@ -27,3 +27,65 @@
 评测用例规模与约定
 对于 100% 的评测用例，保证 n≤1000000。*/
 #include <iostream>
+#include <string>
+using namespace std;
+int main()
+{
+  ios::sync_with_stdio(0),cin.tie(0),cout.tie(0);
+  string s1,s2;
+  cin>>s1>>s2;
+  int id1=0,id2=s1.size()-1,n=s1.size();
+  while(id1<n && s1[id1]=='.' && s2[id1]=='.')
+  {
+    id1++;
+  }
+  if(id1==n)
+  {
+    cout<<"0\n";
+    return 0;
+  }
+  
+  while(id2>=0 && s1[id2]=='.' && s2[id2]=='.')
+  {
+    id2--;
+  }
+  
+  s1=s1.substr(id1,id2-id1+1);
+  s2=s2.substr(id1,id2-id1+1);
+
+  int choice=0;
+  int ans=0;
+  if(s1[0]=='#' && s2[0]=='.') choice=1;
+  else if(s1[0]=='.' && s2[0]=='#') choice=2;
+  for(int i=1;i<s1.size();i++)
+  {
+    if(s1[i]=='#' && s2[i]=='#')
+    {
+      choice=0;
+    }
+    else if(s1[i]=='#' && s2[i]=='.')
+    {
+      if(choice==2)
+      {
+        ans++;
+        choice=0;
+      }
+      else choice=1;
+    }
+    else if(s1[i]=='.' && s2[i]=='#')
+    {
+      if(choice==1)
+      {
+        ans++;
+        choice=0;
+      }
+      else choice=2;
+    }
+    else if(s1[i]=='.' && s2[i]=='.')
+    {
+      ans++;
+    }
+  }
+  cout<<ans<<'\n';
+  return 0;
+}
