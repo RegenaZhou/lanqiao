@@ -1,4 +1,4 @@
-﻿/*
+/*
 问题描述
 大衣的学校计划为 K 个同学和 1 个老师安排一次旅行。
 
@@ -50,60 +50,82 @@
 评测数据规模
 对于所有的评测数据，1≤T≤20，1≤N×M≤10^4，1≤K≤10^9，0≤Ai,j≤10^5。*/
 #include <iostream>
-#include<algorithm>
-#include<vector>
+#include <vector>
 using namespace std;
-#define ll long long
-ll k;
-int n, m, t;
-ll get_num(int l, int i, int j, vector<vector<int>>& sum);
-void solve() {
+using ll = long long;
+ll n, m, k;
+ll getsum(ll l, ll i, ll j, vector<vector<ll>>& sum)
+{
+    //x1,x2,y1,y2为以 l（mid）一圈的数组范围内坐标，用来计算二维前缀和
+    ll x1 = max(i - l, ll(1)), y1 = max(j - l, ll(1)), x2 = min(i + l, n), y2 = min(j + l, m);
+    return sum[x2][y2] - sum[x1 - 1][y2] - sum[x2][y1 - 1] + sum[x1 - 1][y1 - 1];
+}
+void solve()
+{
     cin >> n >> m >> k;
-    vector<vector<int>>arr(n + 1, vector<int>(m + 1));
-    vector<vector<int>>sum(n + 1, vector<int>(m + 1));
-    for (int i = 1; i <= n; i++) {
-        for (int j = 1; j <= m; j++) {
-            cin >> arr[i][j];
-            sum[i][j] = sum[i][j - 1] + arr[i][j];
+    vector<vector<ll>> sum(n + 1, vector<ll>(m + 1, 0));
+
+    for (ll i = 1; i <= n; i++)
+    {
+        for (ll j = 1; j <= m; j++)
+        {
+            cin >> sum[i][j];
+            sum[i][j] += sum[i][j - 1] + sum[i - 1][j] - sum[i - 1][j - 1];
         }
-        for (int j = 1; j <= m; j++)
-            sum[i][j] += sum[i - 1][j];
-    }  //创建二维前缀和
+    }
+
+    if (sum[n][m] < k + 1)
+    {
+        cout << "-1\n";
+        return;
+    }
 
     int x = 0, y = max(n, m);
-    int flag = 1;
-    while (x < y) {
+    while (x < y)
+    {
         int mid = (x + y) / 2;
-        if (sum[n][m] - sum[0][m] - sum[n][0] + sum[0][0] < k + 1) {   
-        //如果房间总人数都＜k+1，可以直接跳过输出-1了
-            flag = 0; break;
-        }
-        int ret = 0;
-        for (int i = 1; i <= n; i++) {
-            for (int j = 1; j <= m; j++) {
-                if (arr[i][j] == 0)continue;
-                if (get_num(mid, i, j, sum) >= k + 1) {
-                    ret = 1; 
-                    break;   //可以的话就不用继续枚举了
+        int flag = 0;
+        for (ll i = 1; i <= n; i++)
+        {
+            for (ll j = 1; j <= m; j++)
+            {
+                if (sum[i][j] - sum[i][j - 1] - sum[i - 1][j] + sum[i - 1][j - 1] == 0)
+                {
+                    continue;
+                }
+                if (getsum(mid, i, j, sum) >= k + 1)
+                {
+                    flag = 1;
+                    break;
                 }
             }
-            if (ret)break;
+            if (flag) break;
         }
-        if (ret)y = mid;
-        else x = mid + 1;
+        if (flag)
+        {
+            y = mid;
+        }
+        else
+        {
+            x = mid + 1;
+        }
     }
-    if (x == max(n, m) || flag == 0)cout << -1 << "\n";
-    else cout << x << "\n";
-}
-ll get_num(int l,int i,int j,vector<vector<int>>&sum) {  
-    //x1,x2,y1,y2为以 l（mid）一圈的数组范围内坐标，用来计算二维前缀和
-    int x1 = max(i - l, 1), y1 = max(j - l, 1), x2 = min(i + l, n), y2 = min(j + l, m);
-    return sum[x2][y2] - sum[x1-1][y2] - sum[x2][y1-1] + sum[x1 - 1][y1 - 1];
+    if (x == max(n, m))
+    {
+        cout << "-1\n";
+    }
+    else
+    {
+        cout << y << '\n';
+    }
 }
 int main()
 {
+    ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+    int t;
     cin >> t;
-    while (t--) {
+    while (t--)
+    {
         solve();
     }
     return 0;
