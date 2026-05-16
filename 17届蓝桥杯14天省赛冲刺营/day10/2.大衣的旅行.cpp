@@ -50,3 +50,61 @@
 评测数据规模
 对于所有的评测数据，1≤T≤20，1≤N×M≤10^4，1≤K≤10^9，0≤Ai,j≤10^5。*/
 #include <iostream>
+#include<algorithm>
+#include<vector>
+using namespace std;
+#define ll long long
+ll k;
+int n, m, t;
+ll get_num(int l, int i, int j, vector<vector<int>>& sum);
+void solve() {
+    cin >> n >> m >> k;
+    vector<vector<int>>arr(n + 1, vector<int>(m + 1));
+    vector<vector<int>>sum(n + 1, vector<int>(m + 1));
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= m; j++) {
+            cin >> arr[i][j];
+            sum[i][j] = sum[i][j - 1] + arr[i][j];
+        }
+        for (int j = 1; j <= m; j++)
+            sum[i][j] += sum[i - 1][j];
+    }  //创建二维前缀和
+
+    int x = 0, y = max(n, m);
+    int flag = 1;
+    while (x < y) {
+        int mid = (x + y) / 2;
+        if (sum[n][m] - sum[0][m] - sum[n][0] + sum[0][0] < k + 1) {   
+        //如果房间总人数都＜k+1，可以直接跳过输出-1了
+            flag = 0; break;
+        }
+        int ret = 0;
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= m; j++) {
+                if (arr[i][j] == 0)continue;
+                if (get_num(mid, i, j, sum) >= k + 1) {
+                    ret = 1; 
+                    break;   //可以的话就不用继续枚举了
+                }
+            }
+            if (ret)break;
+        }
+        if (ret)y = mid;
+        else x = mid + 1;
+    }
+    if (x == max(n, m) || flag == 0)cout << -1 << "\n";
+    else cout << x << "\n";
+}
+ll get_num(int l,int i,int j,vector<vector<int>>&sum) {  
+    //x1,x2,y1,y2为以 l（mid）一圈的数组范围内坐标，用来计算二维前缀和
+    int x1 = max(i - l, 1), y1 = max(j - l, 1), x2 = min(i + l, n), y2 = min(j + l, m);
+    return sum[x2][y2] - sum[x1-1][y2] - sum[x2][y1-1] + sum[x1 - 1][y1 - 1];
+}
+int main()
+{
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
