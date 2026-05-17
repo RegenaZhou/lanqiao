@@ -34,51 +34,50 @@
 对于 30% 的数据, 保证 n≤2000;
 
 对于 100% 的数据, 保证 n≤2×10^5; ai,bi≤2n; m≤n^2。*/
-#include <bits/stdc++.h>
+#include <iostream>
 using namespace std;
-using ll=long long;
-const int N=2e5+9;
-ll a[N],b[N];
+using ll = long long;
+const int N = 2e5 + 9;
+ll a[N], b[N];
 
-bool solve(ll mid,int n,int m)//mid几副牌，m空白max 
+bool solve(ll mid, ll n, ll m)//mid几副牌，m空白max 
 {
-	ll sum=0;
-	for(ll i=1;i<=n;i++)
-	{
-    if(a[i]>=mid) continue;
-    else{
-      if(mid-a[i]>b[i]) return false;
-      else sum=sum+(mid-a[i]);
+    for (ll i = 1; i <= n; i++)
+    {
+        if (a[i] < mid)
+        {
+            ll diff = mid - a[i];
+            if (diff > b[i] || diff > m) return false;
+            else m -= diff;
+        }
     }
-	}
-  if(sum<=m) return true;
-  else return false;
+    return true;
 }
 
 int main()
 {
-  ios::sync_with_stdio(0),cin.tie(0),cout.tie(0);
-  ll n,m;
-  ll r=-1,l=0;
-  cin>>n>>m;
-  for(ll i=1;i<=n;i++)
-  {
-    cin>>a[i];
-  }
-  for(ll i=1;i<=n;i++)
-  {
-    cin>>b[i];
-    r=max(r,a[i]+b[i]);
-  }
-  while(l<r)
-  {
-  	ll mid=(l+r)/2;
-  	if(solve(mid,n,m))
-  	{
-      l=mid+1;
+    ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+    ll n, m;
+    ll r = 0, l = 0;
+    cin >> n >> m;
+    for (ll i = 1; i <= n; i++)
+    {
+        cin >> a[i];
     }
-    else r=mid;
-  }
-  cout<<l-1<<'\n';
-  return 0;
+    for (ll i = 1; i <= n; i++)
+    {
+        cin >> b[i];
+        r = max(r, a[i] + b[i]);
+    }
+    while (l < r)
+    {
+        ll mid = (l + r) / 2;
+        if (solve(mid, n, m))
+        {
+            l = mid + 1;
+        }
+        else r = mid;
+    }
+    cout << l - 1 << '\n';
+    return 0;
 }
