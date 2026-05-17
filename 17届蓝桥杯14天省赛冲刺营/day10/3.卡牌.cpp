@@ -58,7 +58,7 @@ int main()
 {
     ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
     ll n, m;
-    ll r = 0, l = 0;
+    ll r = 0, l = -1;
     cin >> n >> m;
     for (ll i = 1; i <= n; i++)
     {
@@ -69,15 +69,17 @@ int main()
         cin >> b[i];
         r = max(r, a[i] + b[i]);
     }
-    while (l < r)
+
+    r++;
+    while (l + 1 < r)
     {
         ll mid = (l + r) / 2;
         if (solve(mid, n, m))
         {
-            l = mid + 1;
+            l = mid;
         }
         else r = mid;
     }
-    cout << l - 1 << '\n';
+    cout << l << '\n';
     return 0;
 }
