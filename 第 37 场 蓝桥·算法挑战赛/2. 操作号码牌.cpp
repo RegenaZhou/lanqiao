@@ -59,3 +59,21 @@ int main()
     cout << ans << '\n';
     return 0;
 }
+
+//以下为理解本质后更优的解法
+#include <iostream>
+using namespace std;
+int main()
+{
+    ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+    int n, num, maxn = 0, ans;
+    cin >> n;
+    for (int i = 1; i <= n; i++)
+    {
+        cin >> num;
+        maxn = max(maxn, num);
+    }
+    ans = maxn - n;
+    cout << ans << '\n';
+    return 0;
+}
