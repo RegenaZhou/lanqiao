@@ -28,3 +28,77 @@
 
 样例输出
 1 2*/
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <cmath>
+using namespace std;
+
+using i64 = long long;
+using i128 = __int128_t;
+
+int N;
+i64 M;
+vector<i64> a;
+i64 check(long double mid, i64& bx, i64& by)
+{
+    i64 cnt = 0;
+    bx = 0, by = 1;
+    int p = -1;
+    bool gel = (mid >= 1.0L);
+
+    for (int j = 0; j < N; j++)
+    {
+        while (p + 1 < N && (long double)a[p + 1] <= mid * a[j]) p++;
+        cnt += p + 1;
+        if (gel) cnt--;
+
+        int k = p;
+        if (k == j) k--;
+        if (k >= 0)
+        {
+            if ((i128)a[k] * by > (i128)bx * a[j])
+            {
+                bx = a[k];
+                by = a[j];
+            }
+        }
+    }
+    return cnt;
+}
+int main()
+{
+    ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+    cin >> N >> M;
+
+    a.resize(N);
+    for (int i = 0; i < N; i++)
+    {
+        cin >> a[i];
+    }
+    sort(a.begin(), a.end());
+
+    long double l = 0, r = (long double)a.back() / a.front();
+    i64 ansx = 0, ansy = 1;
+
+    for (int t = 0; t < 70; t++)
+    {
+        long double mid = (l + r) / 2;
+        i64 bx, by;
+        i64 cnt = check(mid, bx, by);
+        if (cnt >= M)
+        {
+            r = mid;
+            ansx = bx;
+            ansy = by;
+        }
+        else
+        {
+            l = mid;
+        }
+    }
+
+    i64 g = gcd(ansx, ansy);
+    cout << ansx / g << ' ' << ansy / g << '\n';
+    return 0;
+}
