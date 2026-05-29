@@ -31,7 +31,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include <cmath>
+#include <numeric>
 using namespace std;
 
 using i64 = long long;
