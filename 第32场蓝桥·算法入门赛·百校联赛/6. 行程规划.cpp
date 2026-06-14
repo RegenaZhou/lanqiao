@@ -21,13 +21,13 @@ LQL
 
 样例输出
 3*/
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
 using namespace std;
 using ll = long long;
-
-signed main() {
+int main()
+{
     ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
-
     int n;
     string s;
     cin >> n >> s;
@@ -38,17 +38,18 @@ signed main() {
         if (s[i] == 'L') pos.push_back(i);
     }
 
-    ll ans = 1;
+    ll ans = 1, mood = 1000000007;
     int m = pos.size();
     if (!m)
     {
         cout << "0\n";
-        return;
+        return 0;
     }
     for (int i = 1; i < m; i++)
     {
-        ans = ans * (pos[i] - pos[i - 1] + 1) % MOD;
+        ans = ans * (pos[i] - pos[i - 1] + 1) % mood;
     }
     cout << ans << "\n";
+
     return 0;
 }
