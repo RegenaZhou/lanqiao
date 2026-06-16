@@ -38,3 +38,43 @@
 
 说明
 对于样例 1，首次恰好有 1 名同学参与搭雪人活动的时间点为 1，首次恰好有 2 名同学参与搭雪人活动的时间点为 2。*/
+#include <iostream>
+#include <vector>
+#include <map>
+using namespace std;
+using ll = long long;
+int main()
+{
+    ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+    int n;
+    cin >> n;
+    map<ll, int> events;
+    for (int i = 0; i < n; i++)
+    {
+        ll l, r;
+        cin >> l >> r;
+        events[l]++;
+        events[r + 1]--;
+    }
+
+    vector<ll> ans(n + 1, -1);
+    int cnt = 0;
+    ll last_time = -1;
+    for (auto it = events.begin(); it != events.end(); it++)
+    {
+        ll t = it->first;
+        int delta = it->second;
+        if (last_time != -1 && cnt > 0 && cnt <= n && ans[cnt] == -1)
+        {
+            ans[cnt] = last_time;
+        }
+        cnt += delta;
+        last_time = t;
+    }
+
+    for (int k = 1; k <= n; k++)
+    {
+        cout << ans[k] << '\n';
+    }
+    return 0;
+}
