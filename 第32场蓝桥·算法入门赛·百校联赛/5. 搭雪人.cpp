@@ -59,17 +59,14 @@ int main()
 
     vector<ll> ans(n + 1, -1);
     int cnt = 0;
-    ll last_time = -1;
     for (auto it = events.begin(); it != events.end(); it++)
     {
         ll t = it->first;
-        int delta = it->second;
-        if (last_time != -1 && cnt > 0 && cnt <= n && ans[cnt] == -1)
+        cnt += it->second;
+        if (cnt > 0 && cnt <= n && ans[cnt] == -1)
         {
-            ans[cnt] = last_time;
+            ans[cnt] = t;
         }
-        cnt += delta;
-        last_time = t;
     }
 
     for (int k = 1; k <= n; k++)
