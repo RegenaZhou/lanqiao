@@ -29,3 +29,27 @@
 对于 40% 的评测用例，2≤M≤N≤10^3，1≤Ai≤10^3。
 
 对于所有评测用例，2≤M≤N≤10^5，1≤Ai≤10^5。*/
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+typedef long long LL;
+const int N = 1e5 + 10;
+
+int n, m;
+LL a[N];
+
+int main()
+{
+    cin >> n >> m;
+    for(int i = 1; i <= n; i++) cin >> a[i];
+    sort(a + 1, a + 1 + n);
+
+    LL ret = 1e10; // 设一个最大值
+    for(int i = 1; i + m - 1 <= n; i++)
+        ret = min(ret, a[i + m - 1] * a[i + m - 1] - a[i] * a[i]);
+    cout << ret << endl;
+
+    return 0;
+}
