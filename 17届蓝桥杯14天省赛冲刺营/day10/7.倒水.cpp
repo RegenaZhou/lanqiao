@@ -1,4 +1,4 @@
-﻿/*
+/*
 问题描述
 小蓝有 n 个装了水的瓶子，从左到右摆放，第 i 个瓶子里装有 ai 单位的水。为了美观，小蓝将水循环染成了 k 种颜色，也就是说，第 i 个瓶子和第 i+k 个瓶子里的水的颜色相同。
 
@@ -22,86 +22,47 @@
 3
 
 样例说明
-其中一种方案：a1 往 a4  倒入 3 单位；
-a
-2
-a
-2
-​
-  往
-a
-5
-a
-5
-​
-  倒入
-2
-2 单位；
-a
-3
-a
-3
-​
-  往
-a
-6
-a
-6
-​
-  倒入
-1
-1 单位； 最终每个瓶子里的水：
-5
-,
-3
-,
-4
-,
-5
-,
-4
-,
-4
-,
-4
-5,3,4,5,4,4,4，最小值为
-3
-3.
+其中一种方案：a1 往 a4  倒入 3 单位；a2 往 a5 倒入 2 单位；a3 往 a6 倒入 1 单位； 最终每个瓶子里的水：5,3,4,5,4,4,4，最小值为 3.
 
 评测用例规模与约定
-对于
-40
-%
-40% 的评测用例，
-1
-≤
-n
-,
-a
-i
-≤
-100
-1≤n,a
-i
-​
- ≤100;
+对于 40% 的评测用例，1≤n,ai≤100;
 
-对于所有评测用例，
-1
-≤
-n
-,
-a
-i
-≤
-100000
-1≤n,a
-i
-​
- ≤100000,
-1
-≤
-k
-≤
-n
-1≤k≤n。*/
+对于所有评测用例，1≤n,ai≤100000, 1≤k≤n。*/
+#include <iostream>
+#include <vector>
+using namespace std;
+using ll = long long;
+ll n, k;
+int arr[100009];
+bool check(ll x)
+{
+    for (int i = 0; i < k; i++)
+    {
+        ll hou = 0;
+        for (int j = i; j < n; j += k)
+        {
+            if (arr[j] + hou >= x) hou = arr[j] + hou - x;
+            else return false;
+        }
+    }
+    return true;
+}
+int main()
+{
+    ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+    cin >> n >> k;
+    for (int i = 0; i < n; i++)
+    {
+        cin >> arr[i];
+    }
+
+    ll l = 0, r = 100001;
+    while (l < r)
+    {
+        ll mid = (l + r + 1) / 2;
+        if (check(mid)) l = mid;
+        else r = mid - 1;
+    }
+    cout << l << '\n';
+    return 0;
+}
