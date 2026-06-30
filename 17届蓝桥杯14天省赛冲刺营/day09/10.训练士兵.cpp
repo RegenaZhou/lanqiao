@@ -1,4 +1,4 @@
-﻿/*
+/*
 问题描述
 在蓝桥王国中，有 n 名士兵，这些士兵需要接受一系列特殊的训练，以提升他们的战斗技能。对于第 i 名士兵来说，进行一次训练所需的成本为 pi 枚金币，而要想成为顶尖战士，他至少需要进行 ci 次训练。
 
@@ -30,3 +30,51 @@
 对于 40% 的评测用例，1≤n≤10^3，1≤pi,ci≤10^5，1≤S≤10^7。
 
 对于所有评测用例，1≤n≤10^5，1≤pi,ci≤10^6，1≤S≤10^10。*/
+#include <iostream>
+#include <algorithm>
+#include <vector>
+using namespace std;
+using ll = long long;
+struct Node
+{
+    ll c, p;
+};
+
+bool cmp(Node x, Node y)
+{
+    if (x.c != y.c) return x.c < y.c;
+    else return x.p < y.p;
+}
+int main()
+{
+    ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+
+    ll n, s, ans = 0, cur = 0, sum = 0, id = 0;
+    cin >> n >> s;
+    id = n;
+    vector<Node> arr(n + 1);
+    for (int i = 1; i <= n; i++)
+    {
+        cin >> arr[i].p >> arr[i].c;
+    }
+
+    sort(arr.begin() + 1, arr.end(), cmp);
+
+    while (sum < s && id>0)
+    {
+        sum += arr[id].p;
+        id--;
+    }
+    id++;
+
+    ll jxxl = arr[id].c;
+    ans += jxxl * s;
+    for (int i = id + 1; i <= n; i++)
+    {
+        if (arr[i].c > jxxl) ans += (arr[i].c - jxxl) * arr[i].p;
+    }
+
+    cout << ans << '\n';
+
+    return 0;
+}
