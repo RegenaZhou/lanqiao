@@ -49,7 +49,7 @@ int main()
 {
     ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
 
-    ll n, s, ans = 0, cur = 0, sum = 0, id = 0;
+    ll n, s, ans = 0, sum = 0, id = 0;
     cin >> n >> s;
     id = n;
     vector<Node> arr(n + 1);
