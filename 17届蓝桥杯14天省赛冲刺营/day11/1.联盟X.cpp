@@ -28,3 +28,39 @@
 2
 
 评测数据范围 2≤n,m≤2×10^4,1≤u,v≤n。*/
+#include <iostream>
+#include <vector>
+using namespace std;
+const int N = 2e4 + 9;
+vector<int> G[N];
+bool vis[N];
+int n, m, temp = 0, ans = 1e9;
+void dfs(int u)
+{
+    vis[u] = true;
+    temp++;
+    for (int v : G[u])
+        if (!vis[v])dfs(v);
+}
+int main()
+{
+    ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+    cin >> n >> m;
+    for (int i = 1; i <= m; i++)
+    {
+        int u, v; cin >> u >> v;
+        G[u].push_back(v);
+        G[v].push_back(u);
+    }
+    for (int i = 1; i <= n; i++)
+    {
+        if (!vis[i])
+        {
+            temp = 0;
+            dfs(i);
+            ans = min(ans, temp);
+        }
+    }
+    cout << ans << '\n';
+    return 0;
+}
