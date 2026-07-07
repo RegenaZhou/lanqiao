@@ -31,3 +31,48 @@
 对于 20% 的评测用例，1⩽n⩽500；
 
 对于所有评测用例，1⩽n⩽5000，1⩽ui,vi⩽n。*/
+#include<bits/stdc++.h>
+using namespace std;
+using ll=long long;
+const ll N=5e3+5;
+const ll M=2e18+5;
+ll n,m,k;
+vector<ll>work[N];
+ll d[N];
+void bfs(ll st){//bfs
+  queue<ll>sun;
+  d[st]=0;
+  sun.push(st);
+  while(sun.size()){
+    ll id=sun.front();
+    sun.pop();
+    for(auto&p:work[id]){
+      if(d[id]+1<d[p]){
+        d[p]=d[id]+1;
+        sun.push(p);
+      }
+    }
+  }
+}
+int main(){
+    ios::sync_with_stdio(0),cin.tie(0),cout.tie(0);
+    cin>>n;
+    for(ll i=1;i<=n-1;i++){
+      ll u,v;cin>>u>>v;
+      work[u].push_back(v);
+      work[v].push_back(u);
+    }
+    ll ans=0;
+    for(ll i=1;i<=n;i++){//枚举b或者c
+      for(ll j=1;j<=n;j++)d[j]=M;//每次初始化
+      bfs(i);
+      ll s=0;
+      for(ll j=1;j<=n;j++){
+        if(d[j]%2)s=max(s,d[j]-1);//如果距离是奇数那么显然没有中间点可以当a，故减去1，即把c往前移一位
+        else s=max(s,d[j]);//偶数中间那个当a即可
+      }
+      ans=max(s,ans);
+    }
+    cout<<ans;
+    return 0;
+}
