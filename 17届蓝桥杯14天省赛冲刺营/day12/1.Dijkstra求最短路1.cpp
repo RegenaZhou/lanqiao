@@ -1,4 +1,4 @@
-﻿/*
+/*
 问题描述
 给定一张 n 个点 m 条边的有向图，该图可以有自环与重边。
 
@@ -33,6 +33,7 @@
 
 看图可知最短路为 [1,4,2,5]。*/
 #include <iostream>
+#include <climits>
 #include <vector>
 #include <queue>
 using ll = long long;
