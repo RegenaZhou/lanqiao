@@ -34,3 +34,44 @@ A 国有 N 个城市, 编号为 1…N 。小明是编号为 1 的城市中一家
 
 评测用例规模与约定
 对于 100% 的数据, 1≤N≤1000, 1≤M≤10000, 1≤Ci≤200, 1≤u,v≤N, 1≤c≤1000*/
+#include<bits/stdc++.h>
+using namespace std;
+int n,m;
+const int N=1e3+10;
+int g[N][N];
+int dist[N];
+bool st[N];
+int stay[N];
+int dijkstra(){
+    memset(dist,0x3f,sizeof(dist));
+    dist[1]=0;
+    for(int i=1;i<n;i++){
+        int t=-1;
+        for(int j=1;j<=n;j++){
+            if(!st[j]&&(t<0||dist[t]>dist[j])){
+                t=j;
+            }
+        }
+        if(t==n) break;
+        for(int j=1;j<=n;j++){
+            dist[j]=min(dist[j],dist[t]+g[t][j]);
+        }
+        st[t]=true;
+    }
+    if(dist[n]==0x3f3f3f3f) return -1;
+    else return dist[n];
+}
+int main(){
+    cin>>n>>m;
+    for(int i=1;i<=n;i++){
+        scanf("%d",&stay[i]);
+    }
+    memset(g,0x3f,sizeof(g));
+    for(int i=0;i<m;i++){
+        int x,y,z;
+        cin>>x>>y>>z;
+        g[x][y]=min(g[x][y],z+stay[y]);
+        g[y][x]=min(g[y][x],z+stay[x]);
+    }
+    cout<<dijkstra()-stay[n];
+}
