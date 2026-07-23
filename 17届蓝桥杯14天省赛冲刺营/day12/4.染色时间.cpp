@@ -37,6 +37,7 @@
 #include <vector>
 #include <queue>
 using namespace std;
+
 int n, m;
 int ans = 0;
 int arr[510][510];
