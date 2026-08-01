@@ -24,62 +24,61 @@
 使用全部六张卡片可以组成 145728，并且：145728=2024×72
 
 不存在比 145728 更大的数满足要求。*/
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <algorithm>
 using namespace std;
-using ll=long long;
+using ll = long long;
 
-int m,n,l;
-string s,cur;
+int m, n, l;
+string s, cur;
 vector<unsigned char> bad;
 
-bool Dfs(int mk,int rm)
+bool Dfs(int mk, int rm)
 {
-  int p=__builtin_popcount(mk);
-  if(p==l)
-  {
-    return rm==0;
-  }
+    int p = __builtin_popcount(mk);
+    if (p == l)
+    {
+        return rm == 0;
+    }
 
-  int ky=mk*m+rm;
-  if(bad[ky])
-  {
+    int ky = mk * m + rm;
+    if (bad[ky]) return false;
+
+    int la = -1;
+    for (int i = 0; i < n; i++)
+    {
+        if (mk >> i & 1) continue;
+        int d = s[i] - '0';
+        if (d == la || (p == 0 && d == 0)) continue;
+        la = d;
+        cur.push_back(s[i]);
+        if (Dfs(mk | (1 << i), (rm * 10 + d) % m)) return true;
+        cur.pop_back();
+    }
+
+    bad[ky] = 1;
     return false;
-  }
-
-  int la=-1;
-  for(int i=0;i<0;i++)
-  {
-    if(mk>>i&1) continue;
-    int d=s[i]-'0';
-    if(d==la || (p==0 && d==0)) continue;
-    la=d;
-    cur.push_back(s[i]);
-    if(Dfs(mk|(1<<i),(rm*10+d)%m)) return false;
-    cur.push_back();
-  }
-
-  bad[ky]=1;
-  return false;
 }
 int main()
 {
-  ios::sync_with_stdio(0),cin.tie(0),cout.tie(0);
-  cin>>n>>m;
-  sort(s.begin(),s.end(),greater<char>());
-  n=s.size();
-  bad.resize((1<<n)*m);
+    ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+    cin >> m >> s;
+    sort(s.begin(), s.end(), greater<char>());
+    n = s.size();
+    bad.resize((1 << n) * m);
 
-  for(int l=n;l>=1;l--)
-  {
-    cur.clear();
-    fill(bad.begin(),bad.end(),0);
-    if(Dfs(0,0))
+    for (l = n; l >= 1; l--)
     {
-      cout<<cur<<'\n';
-      return 0;
+        cur.clear();
+        fill(bad.begin(), bad.end(), 0);
+        if (Dfs(0, 0))
+        {
+            cout << cur << '\n';
+            return 0;
+        }
     }
-  }
 
-  cout<<"-1\n";
-  return 0;
+    cout << "-1\n";
+    return 0;
 }
