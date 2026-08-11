@@ -67,6 +67,7 @@
 #include <iostream>
 #include <vector>
 using namespace std;
+using ll = long long;
 static const long long MOD = 1000000007;
 int N, K;
 vector<int> a;
