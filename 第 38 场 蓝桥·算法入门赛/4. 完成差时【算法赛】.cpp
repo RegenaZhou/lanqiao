@@ -1,4 +1,4 @@
-﻿/*
+/*
 问题描述
 暑假集训期间，教练安排了 N 个训练任务，按顺序排成一列，编号为 1,2,…,N。第 i 个任务的难度为 Ai。
 
@@ -35,3 +35,27 @@
 当 P=3 时，左边完成时间为 1×2+3×1=5，右边完成时间为 4×1+1×2=6，所以完成差时为 1。
 
 其余位置同理。*/
+#include <iostream>
+#include <vector>
+using namespace std;
+using ll = long long;
+int main()
+{
+    ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+    ll n, t;
+    cin >> n;
+    ll sum1 = 0, sum2 = 0;
+    for (int i = 0; i < n; i++)
+    {
+        cin >> t;
+        sum1 += t;
+        sum2 += (i + 1) * t;
+    }
+    for (int p = 1; p <= n; p++)
+    {
+        ll total = p * sum1 - sum2;
+        cout << abs(total) << " ";
+    }
+
+    return 0;
+}
