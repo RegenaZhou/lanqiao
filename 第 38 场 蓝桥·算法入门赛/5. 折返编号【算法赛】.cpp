@@ -1,4 +1,4 @@
-﻿/*
+/*
 问题描述
 对于正整数 x，定义 v2(x) 为 x 能被 2 连续整除的次数。
 
@@ -38,3 +38,26 @@ v2(40)=3，因为 40÷2÷2÷2=5。
 
 以 n=11 为例，v2(11)=0，所以要计算：11−2^0 = 10
 而 v2(10)=1，所以 11 是一个好数。*/
+#include <iostream>
+using namespace std;
+using ll = long long;
+int main()
+{
+    ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+    ll n, k, ans = 0, p;
+    cin >> n >> k;
+
+    p = 1LL << k;
+    for (int i = 0; i < k; i++)
+    {
+        ll low = 1LL << i;
+        if (low + p > n) continue;
+
+        ll m = (n - low) / p;
+        ans += (m + 1) / 2;
+    }
+
+    cout << ans << '\n';
+
+    return 0;
+}
