@@ -1,4 +1,4 @@
-﻿/*
+/*
 问题描述
 有 2^d 个房间。每个房间用一个长度为 d 的二进制串编号，例如当 d=3 时，房间编号可以是 000、001、010 等。
 
@@ -40,3 +40,68 @@
 对于第三个询问，d=3,n=2。
 
 第一次移动一定会把某一位从0 变成1。第二次移动只有再次选择同一位，才能回到 000。这个概率是 1/3 ，因此输出 3 的逆元 332748118。*/
+#include <iostream>
+using namespace std;
+using ll = long long;
+const int mod = 998244353;
+const int N = 505;
+int C[N][N];
+
+int qpow(int a, int b) {
+    int ans = 1;
+    a %= mod;
+    while (b) {
+        if (b & 1) ans = ans * a % mod;
+        a = a * a % mod;
+        b >>= 1;
+    }
+    return ans;
+}
+
+void init() {
+    for (int i = 0; i < N; ++i) {
+        C[i][0] = 1;
+        for (int j = 1; j <= i; ++j)
+            C[i][j] = (C[i - 1][j - 1] + C[i - 1][j]) % mod;
+    }
+}
+
+void solve() {
+    int d, n; 
+    cin >> d >> n;
+    int pow2d = qpow(2, d);
+    int inv2d = qpow(pow2d, mod - 2);
+    int invd = qpow(d, mod - 2);
+    int S = 0;
+    for (int i = 0; i <= d; i++) {
+        int c = C[d][i];
+        int a = (d - 2 * i) % mod;
+        if (a < 0) a += mod;
+        int r = a * invd % mod;
+        int rn = qpow(r, n);
+        int sum_r;
+        if (r == 1) {
+            sum_r = n % mod;
+        }
+        else {
+            int numer = r * ((1 - rn + mod) % mod) % mod;
+            int denom = (1 - r + mod) % mod;
+            sum_r = numer * qpow(denom, mod - 2) % mod;
+        }
+        S = (S + c * sum_r) % mod;
+    }
+    int ans = S * inv2d % mod;
+    cout << ans << '\n';
+}
+
+signed main()
+{
+    ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+    init();
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
