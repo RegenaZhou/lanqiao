@@ -31,3 +31,69 @@
 第一种要求需要平均分成 12 份。选取 3 张图片时只有 6 种排列，无法分组；选取 4 张图片时有 24 种排列，可以分为 12 份，每份 2 组，因此答案为 4。
 
 第二种要求需要平均分成 144 份。选取 5 张图片时有 120 种排列，不符合要求；选取 6 张图片时有 720 种排列，可以分为 144 份，每份 5 组，因此答案为 6。*/
+#include<bits/stdc++.h>
+using namespace std;
+#define int long long
+#define endl "\n"
+vector<pair<int ,int>>p;//分解b
+int q,b,e;
+
+void f(int x){
+  for(int i=2;i*i<=x;i++){
+    if(x%i==0){
+      int cnt=0;
+      while(x%i==0){
+        x/=i;
+        cnt++;
+      }
+    p.push_back({i,cnt});
+    }
+  }
+  if(x>1)p.push_back({x,1});
+}
+
+int get(int n,int p)
+{
+  int res=0;
+  while(n){
+    res+=n/p;
+    n/=p;
+  } 
+  return res;
+}
+
+bool check(int mid){
+  for(auto it:p){
+  int num=it.first;
+  int cnt=it.second;
+  int nt=get(mid,num);
+  if(nt<cnt*e){
+      return false;//数小于结果
+  }
+}
+return true;//数大于等于结果
+}
+
+void solve(){
+  p.clear();
+cin>>b>>e;
+f(b);
+
+int l=1,r=b*e;
+int res;
+while(l<=r){
+  int mid=(l+r)/2;
+  if(check(mid)){
+    res=mid;
+    r=mid-1;
+  }else l=mid+1;
+
+}
+cout<<res<<endl;
+
+}
+
+signed main(){
+  cin>>q;
+  while(q--)solve();
+}
