@@ -1,4 +1,4 @@
-﻿/*
+/*
 问题描述
 蓝桥学院将举办一场程序设计 PK 赛，共有 n 支参赛队，队伍编号为 1∼n。
 
@@ -21,3 +21,21 @@
 
 样例输出
 4 5 1 2 3*/
+#include <iostream>
+using namespace std;
+int main()
+{
+    ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+    int n, p, v;
+    cin >> n >> p >> v;
+    v = (v + n + 1 - p) % n;
+    if (v == 0) v = n;
+    cout << v;
+    for (int i = 1; i < n; i++)
+    {
+        if (v == n) v = 0;
+        v++;
+        cout << " " << v;
+    }
+    return 0;
+}
